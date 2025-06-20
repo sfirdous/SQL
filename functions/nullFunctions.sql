@@ -62,3 +62,17 @@ ON Sales.Orders.CustomerID = Sales.Customers.CustomerID
 WHERE Sales.Orders.OrderID IS NULL
 
 
+
+--Data prepapration rules for null values 
+with Orders as (
+SELECT 1 ID ,'A' Category UNION
+SELECT 2 , NULL UNION
+SELECT 3 , '' UNION
+SELECT 4 , '      ' 
+)
+SELECT * ,
+DATALENGTH(Category) as CatLen,
+DATALENGTH(trim(Category)) as policy1,
+NULLIF(trim(Category),'') as policy2,
+COALESCE(NULLIF(trim(Category),''),'unknown') as policy3
+FROM Orders
