@@ -41,3 +41,31 @@ OrderID,
 Sales,
 RANK() OVER(ORDER BY Sales DESC ) as RankSales
 FROM Sales.Orders
+
+--Window Frame
+SELECT
+OrderId,
+Sales,
+SUM(SALES) OVER(PARTITION BY OrderStatus ORDER BY OrderDate ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING)  
+FROM Sales.Orders
+
+/*TASK :5
+Find the total sales for each order status, only for two products 101 and 102*/
+SELECT
+OrderId,
+Sales,
+OrderStatus,
+ProductID,
+SUM(Sales) OVER (PARTITION BY OrderStatus) as TotalSales
+FROM Sales.Orders
+WHERE ProductID in (101,102)
+
+
+/*TASK : 6 
+Rank Customer Based on their Sales*/
+SELECT
+CustomerID,  
+SUM(Sales) as IndividualSales ,
+RANK() OVER(ORDER BY SUM(Sales) DESC) as RankCustomers
+FROM Sales.Orders
+Group BY CustomerID
