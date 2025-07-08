@@ -128,3 +128,17 @@ MAX(Sales) OVER() as max,
 Sales - MIN(Sales) OVER() as DeviationFromMin,
 MAX(Sales) OVER() - Sales  as DeviationFromMax
 from Sales.Orders
+
+--Running and Rolling Total
+/*Calculate the moving average of sales for each product over time*/
+SELECT 
+ProductID,
+Sales,
+AVG(Sales) OVER(partition by ProductID order by OrderDate) as MovingAvg
+FROM Sales.Orders
+
+SELECT 
+ProductID,
+Sales,
+AVG(Sales) OVER(partition by ProductID order by OrderDate Rows between  current row and 1 following)  as AvgSalesOverTime
+FROM Sales.Orders
